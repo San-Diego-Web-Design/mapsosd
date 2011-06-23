@@ -1,0 +1,50 @@
+<VirtualHost *:80>
+	ServerName maps.opensandiego.org 
+	ServerAdmin ortelius@gmail.com 
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/geonode/htdocs/>
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+        <Proxy *>
+		order allow,deny
+		allow from all
+	</Proxy>
+
+	ErrorLog /var/log/apache2/geonode-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel debug 
+
+	CustomLog /var/log/apache2/geonode-access.log combined
+
+	#trying to web enable the media directory for gravatar uploads
+    Alias /static/ /var/www/geonode/media/
+    <Directory "/var/www/geonode/media/">
+        Options Indexes MultiViews FollowSymLinks
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+
+    WSGIPassAuthorization On
+    WSGIScriptAlias / "/var/www/mapsosd/wsgi/mapsosd.wsgi"
+    Alias /robots.txt /var/www/geonode/htdocs/robots.txt
+    Alias /media "/var/www/geonode/wsgi/geonode/src/GeoNodePy/geonode/media"
+    Alias /mapsosd-media "/var/www/mapsosd/media"
+
+    ProxyPreserveHost On
+
+    ProxyPass /geoserver-geonode-dev http://localhost:8080/geoserver-geonode-dev
+    ProxyPassReverse /geoserver-geonode-dev http://localhost:8080/geoserver-geonode-dev
+
+    ProxyPass /geonetwork http://localhost:8080/geonetwork
+    ProxyPassReverse /geonetwork http://localhost:8080/geonetwork
+</VirtualHost>
