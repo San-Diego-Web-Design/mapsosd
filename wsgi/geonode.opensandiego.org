@@ -39,6 +39,7 @@
     Alias /robots.txt /var/www/geonode/htdocs/robots.txt
     Alias /media "/var/www/geonode/wsgi/geonode/src/GeoNodePy/geonode/media"
     Alias /mapsosd-media "/var/www/mapsosd/media"
+    Alias /admin-media/ /var/www/geonode/wsgi/geonode/lib/python2.6/site-packages/django/contrib/admin/media/
 
     ProxyPreserveHost On
 
